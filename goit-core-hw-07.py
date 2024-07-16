@@ -17,7 +17,7 @@ class Name(Field):
 class Phone(Field):
 	def __init__(self, value):
             super().__init__(value)
-            if 10 != len(value) or not int(value):
+            if 10 != len(value) or isinstance(value, int):
                 raise ValueError("Phone has incorrect format")
             
 
@@ -47,7 +47,7 @@ class Record:
          self.phones.remove(phone)
     
     def edit_phone(self, old_number, new_number):
-          if old_number not in self.phones or len(new_number) != 10 or not int(old_number) or not int(new_number):
+          if old_number not in self.phones or len(new_number) != 10 or not isinstance(old_number, int) or not isinstance(new_number, int):
             raise ValueError("One of phones or both of them have incorrect format")
           else:
             self.phones[self.phones.index(old_number)] = new_number
@@ -147,10 +147,13 @@ def all (args):
 
 @input_error
 def change_nummer( name, old_nummer, new_nummer):
-    for el in Record.list_of_objects:
-        if el['name'].value == name and old_nummer in el["phones"]:
-            el["phones"][el["phones"].index(old_nummer)] = new_nummer
-            return 'Contact changed'
+    if len(old_nummer) != 10 or len(new_nummer) != 10 or not isinstance(old_nummer, int) or not isinstance(new_nummer, int):
+        raise ValueError("One of phones or both of them have incorrect format")
+    else:
+        for el in Record.list_of_objects:
+            if el['name'].value == name and old_nummer in el["phones"]:
+                el["phones"][el["phones"].index(old_nummer)] = new_nummer
+                return 'Contact changed'
 
 @input_error
 def phone (user):
