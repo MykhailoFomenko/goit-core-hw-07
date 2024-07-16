@@ -159,11 +159,17 @@ def phone (user):
             return el["phones"] 
 
 @input_error  
-def add_birthday(args, book):
+def add_birthday_to_user(args, book):
     name, birthday, *_ = args
     user = book.find(name)
-    user.add_birthday(birthday)
-    return "Birthday added."
+    for el in Record.list_of_objects:
+        if el["name"].value == name and el["birthday"] is not None:
+            return "This contact already has birthday date"
+        else:
+            continue
+    else:
+        user.add_birthday(birthday)
+        return "Birthday added."
 
 @input_error
 def show_birthday(args):
@@ -202,7 +208,7 @@ def main():
         elif command == 'phone':
             print(phone(args[0]))
         elif command == "add-birthday":
-            print(add_birthday(args, book))
+            print(add_birthday_to_user(args, book))
         elif command == "show-birthday":
             print(show_birthday(args))
         elif command == "birthdays":
